@@ -1,138 +1,380 @@
-# Smart Parking BD — MERN Stack Version
+Smart Parking BD - MERN Stack
 
-Ei project ta original static HTML/CSS/JS "Smart Parking BD" app ke full MERN stack
-(MongoDB + Express + React + Node.js) e convert kore banano hoyeche. Real-time slot
-sync er jonno Socket.io use kora hoyeche, authentication er jonno JWT + bcrypt.
+Smart Parking BD is a smart parking management web application built with the MERN stack.
 
-## 📁 Folder Structure
-```
+The original project was made with HTML, CSS, and JavaScript. This version was rebuilt using MongoDB, Express.js, React, and Node.js.
+
+The system allows users to create an account, find parking slots, book a slot, make a demo payment, and get a QR ticket. It also has an admin panel for managing the parking system.
+
+Features
+
+• User registration and login
+• Secure user authentication
+• Parking slot booking
+• Live parking slot updates
+• Admin dashboard
+• Automatic booking expiration
+• QR ticket generation
+• CSV data export
+• MongoDB database
+• Socket.io for live updates
+• Face verification demo
+• bKash, Nagad, Rocket, and Upay payment demos
+• Card payment demo
+
+Project Structure
+
 smart-parking-mern/
-  server/     -> Express + MongoDB backend (API + Socket.io)
-  client/     -> React + Vite frontend
+
+```
+client/       React frontend
+
+server/       Node.js and Express backend
+
+.gitignore
 ```
 
-## ⚠️ Ja simulate kora hoyeche (guruttopurno)
-- **Face liveness AI**: real camera on kore step-by-step (soja takano / hasha /
-  matha ghurano) prompt dekhaya hoyeche, kintu eta kono real biometric AI model na —
-  UI/UX simulation. Real system e deploy korar age face-api.js ba কোনো cloud
-  Face Liveness API (AWS Rekognition, Azure Face) integrate korte hobe.
-- **bKash / Nagad / Rocket / Upay payment**: eta demo merchant number e "send money"
-  dekhano হয়, কোনো real payment gateway call hoy na. Real payment nite hole
-  bKash/Nagad er official Merchant API লাগবে (business verification lagbe).
-- **Card payment**: card details শুধু UI তে collect হয়, কোনো real card processor
-  (Stripe/SSLCommerz) e connect kora hoyni.
+Technologies Used
 
-Baki shob feature (auth, real-time slot booking/sync, admin dashboard, auto-expire,
-QR ticket, CSV export) fully functional MongoDB er sathe.
+Frontend
 
----
+• React
+• Vite
+• React Router
+• Axios
+• Socket.io Client
+• qrcode.react
 
-## 🖥️ VS Code e First to Last Run Kora (Step by Step)
+Backend
 
-### ধাপ ০: Prerequisites install করুন (একবারই লাগবে)
-1. **Node.js** (v18 বা তার উপরে) install করুন: https://nodejs.org (LTS version নিন)
-   - Install হয়ে গেলে verify করুন:
-     ```
-     node -v
-     npm -v
-     ```
-2. **VS Code** install করুন: https://code.visualstudio.com
-3. **MongoDB Atlas** (free cloud database) account বানান: https://www.mongodb.com/cloud/atlas/register
-   - একটা free (M0) cluster বানান
-   - Database Access এ একটা user বানান (username/password মনে রাখবেন)
-   - Network Access এ "Allow access from anywhere" (0.0.0.0/0) দিন — শুধু local dev এর জন্য
-   - "Connect" → "Drivers" থেকে connection string কপি করুন
-     (দেখতে এমন হবে: `mongodb+srv://user:pass@cluster0.xxxxx.mongodb.net/`)
+• Node.js
+• Express.js
+• Mongoose
+• Socket.io
+• JWT
+• bcryptjs
 
-### ধাপ ১: Project ফোল্ডার VS Code এ খুলুন
-1. Download করা zip file টা extract করুন (যেমন `Desktop\smart-parking-mern`)
-2. VS Code খুলুন → File → Open Folder → `smart-parking-mern` ফোল্ডার সিলেক্ট করুন
-3. VS Code এর উপরের মেনু থেকে Terminal → New Terminal খুলুন (২টা টার্মিনাল লাগবে —
-   একটা backend এর জন্য, একটা frontend এর জন্য)
+Database
 
-### ধাপ ২: Backend (server) সেটআপ করুন
-Terminal ১ এ:
-```bash
+• MongoDB
+• MongoDB Atlas
+
+Important Notes
+
+Some parts of the project are demos and are not connected to real services yet.
+
+Face Verification
+
+The face verification feature uses the camera and shows simple steps such as:
+
+• Look straight
+• Smile
+• Turn your head
+
+This is only a demo. It does not actually check whether the person is real using AI.
+
+For a real system, an actual face liveness system would need to be added.
+
+Payment
+
+The following payment methods are available as demos:
+
+• bKash
+• Nagad
+• Rocket
+• Upay
+
+The app shows a demo payment process, but it does not make a real payment.
+
+For a real payment system, the official payment APIs would need to be connected.
+
+Card Payment
+
+The card payment page is also a demo.
+
+Card information is only entered into the website. It is not sent to a real payment service such as Stripe or SSLCommerz.
+
+How to Run the Project
+
+1. Install Node.js
+
+Install Node.js version 18 or newer.
+
+Check that Node.js is installed:
+
+node -v
+
+npm -v
+
+2. Set Up MongoDB
+
+Create a free MongoDB Atlas account and create a database.
+
+You will need:
+
+• MongoDB username
+• MongoDB password
+• MongoDB connection string
+
+Your connection string will look something like:
+
+mongodb+srv://username:password@cluster0.xxxxx.mongodb.net/
+
+3. Open the Project
+
+Open the project folder in VS Code:
+
+smart-parking-mern
+
+You will need two terminals.
+
+One terminal will run the backend and the other will run the frontend.
+
+4. Set Up the Backend
+
+Open the first terminal:
+
 cd server
-npm install
-```
-এরপর `server` ফোল্ডারের ভিতরে `.env.example` ফাইলটা কপি করে `.env` নামে নতুন ফাইল বানান
-(VS Code এ right-click → Copy, তারপর Paste, তারপর rename করুন `.env`)।
 
-`.env` ফাইলে এগুলো বসান:
-```
+npm install
+
+Create a file named .env inside the server folder.
+
+Add:
+
 PORT=5000
-MONGO_URI=<আপনার MongoDB Atlas connection string, শেষে /smartParkingBD যোগ করুন>
-JWT_SECRET=<যেকোনো লম্বা random string>
-CLIENT_URL=http://localhost:5173
+
+MONGO_URI=your_mongodb_connection_string
+
+JWT_SECRET=your_secret_key
+
+CLIENT_URL=[http://localhost:5173](http://localhost:5173)
+
 ADMIN_USERNAME=admin
+
 ADMIN_PASSWORD=admin123
-```
-উদাহরণ MONGO_URI:
-```
-mongodb+srv://myuser:mypass123@cluster0.abcde.mongodb.net/smartParkingBD?retryWrites=true&w=majority
-```
 
-এখন backend চালু করুন:
-```bash
+Example:
+
+PORT=5000
+
+MONGO_URI=mongodb+srv://myuser:mypass123@cluster0.abcde.mongodb.net/smartParkingBD
+
+JWT_SECRET=my-secret-key
+
+CLIENT_URL=[http://localhost:5173](http://localhost:5173)
+
+ADMIN_USERNAME=admin
+
+ADMIN_PASSWORD=admin123
+
+Then start the backend:
+
 npm run dev
-```
-টার্মিনালে `✅ MongoDB connected` এবং `🚀 সার্ভার চলছে http://localhost:5000` দেখলে
-বুঝবেন backend ঠিকমতো চলছে। প্রথমবার চালু হলে ১২টা parking slot অটোমেটিক তৈরি হবে।
 
-### ধাপ ৩: Frontend (client) সেটআপ করুন
-Terminal ২ (নতুন টার্মিনাল খুলুন, backend টার্মিনাল বন্ধ করবেন না) এ:
-```bash
+The backend should start on:
+
+[http://localhost:5000](http://localhost:5000)
+
+The first time the server starts, the system will create the initial 12 parking slots automatically.
+
+5. Set Up the Frontend
+
+Open the second terminal.
+
+From the main project folder:
+
 cd client
+
 npm install
-```
-`client` ফোল্ডারে `.env.example` কপি করে `.env` বানান (একইভাবে), ভিতরে থাকবে:
-```
-VITE_API_URL=http://localhost:5000/api
-VITE_SOCKET_URL=http://localhost:5000
-```
-(লোকাল ডেভে ডিফল্ট ভ্যালু ঠিক আছে, কিছু পরিবর্তন লাগবে না)
 
-এখন frontend চালু করুন:
-```bash
+Create a file named .env inside the client folder.
+
+Add:
+
+VITE_API_URL=[http://localhost:5000/api](http://localhost:5000/api)
+
+VITE_SOCKET_URL=[http://localhost:5000](http://localhost:5000)
+
+Then start the frontend:
+
 npm run dev
-```
-টার্মিনালে একটা লোকাল লিংক দেখাবে, সাধারণত:
-```
-http://localhost:5173/
-```
-এই লিংকে ব্রাউজারে গিয়ে পুরো অ্যাপ দেখতে পাবেন।
 
-### ধাপ ৪: টেস্ট করুন
-- Register করে নতুন ইউজার বানান → Booking পেজে গিয়ে স্লট সিলেক্ট করুন
-- Face verification স্টেপে ক্যামেরা পারমিশন দিন (ব্রাউজার popup আসবে)
-- Payment method সিলেক্ট করে বুকিং কনফার্ম করুন
-- দুইটা ব্রাউজার ট্যাব/ডিভাইস দিয়ে একসাথে খুলে দেখুন — একজন বুকিং করলে অন্যজনের
-  Live Map/Home page এ রিয়েল-টাইমে স্লট আপডেট হবে (Socket.io দিয়ে)
-- Admin পেজে যান, লগইন করুন `admin` / `admin123` দিয়ে (বা .env এ যা সেট করেছেন)
+You should see a local address such as:
 
-### সবসময় মনে রাখবেন
-- দুইটা টার্মিনাল **একসাথে** চালু রাখতে হবে (server আর client) — যেকোনো একটা বন্ধ
-  করলে অ্যাপ কাজ করবে না।
-- Backend আগে চালু করবেন, তারপর frontend।
-- `.env` ফাইল কখনো GitHub এ push করবেন না (এতে password/secret থাকে) —
-  `.gitignore` তে এটা এমনিতেই বাদ দেওয়া আছে।
+[http://localhost:5173/](http://localhost:5173/)
 
----
+Open that address in your browser.
 
-## 🔧 সাধারণ সমস্যা ও সমাধান (Troubleshooting)
+6. Test the Website
 
-| সমস্যা | সমাধান |
-|---|---|
-| `EADDRINUSE: port 5000 already in use` | আগের কোনো `node` process বন্ধ হয়নি। Terminal এ `npx kill-port 5000` চালান, অথবা `.env` এ PORT পরিবর্তন করুন |
-| MongoDB connect হচ্ছে না (DNS error) | Atlas এর Network Access এ IP whitelist ঠিক আছে কিনা চেক করুন, বা কম্পিউটারের DNS 8.8.8.8 (Google DNS) এ সেট করুন |
-| Frontend এ "Network Error" / booking হচ্ছে না | Backend সার্ভার চালু আছে কিনা চেক করুন, `client/.env` এ VITE_API_URL ঠিক আছে কিনা দেখুন |
-| ক্যামেরা চালু হচ্ছে না | ব্রাউজার camera permission দিন; localhost এ HTTPS ছাড়াও camera কাজ করে |
-| `npm install` এ error | Node.js version v18+ কিনা চেক করুন (`node -v`) |
+Once both the backend and frontend are running:
 
----
+1. Create a new account.
+2. Log in.
+3. Go to the booking page.
+4. Select an available parking slot.
+5. Complete the face verification demo.
+6. Select a payment method.
+7. Confirm the booking.
+8. Check your QR ticket.
 
-## 📦 Tech Stack
-- **Frontend**: React 18, Vite, React Router, Axios, Socket.io-client, qrcode.react
-- **Backend**: Node.js, Express, Mongoose (MongoDB), Socket.io, JWT, bcryptjs
-- **Database**: MongoDB Atlas (cloud)
+Live Parking Updates
+
+The project uses Socket.io to update parking slot information in real time.
+
+For example, if one user books a parking slot, other users who have the website open can see the slot status change without refreshing the page.
+
+You can test this by opening the website in two browser tabs.
+
+Admin Panel
+
+The project also has an admin panel.
+
+Use the admin username and password from the server .env file.
+
+For example:
+
+Username: admin
+
+Password: admin123
+
+You can change these values in the .env file.
+
+How the Project Works
+
+The frontend communicates with the backend through API requests.
+
+React
+
+↓
+
+API Requests
+
+↓
+
+Express / Node.js
+
+↓
+
+MongoDB
+
+For live parking updates, Socket.io is used.
+
+User 1 ──┐
+
+User 2 ──┼── Socket.io ── Server
+
+User 3 ──┘
+
+This allows parking slot changes to be shared with connected users in real time.
+
+Environment Files
+
+The project uses .env files for private settings.
+
+Server .env
+
+PORT=5000
+
+MONGO_URI=your_mongodb_connection_string
+
+JWT_SECRET=your_secret_key
+
+CLIENT_URL=[http://localhost:5173](http://localhost:5173)
+
+ADMIN_USERNAME=admin
+
+ADMIN_PASSWORD=admin123
+
+Client .env
+
+VITE_API_URL=[http://localhost:5000/api](http://localhost:5000/api)
+
+VITE_SOCKET_URL=[http://localhost:5000](http://localhost:5000)
+
+Do not upload .env files to GitHub.
+
+They may contain your database password, admin password, and other private information.
+
+Common Problems
+
+Port 5000 is already being used
+
+You can stop the old process or run:
+
+npx kill-port 5000
+
+Then start the server again:
+
+npm run dev
+
+MongoDB is not connecting
+
+Check:
+
+• MongoDB username
+• MongoDB password
+• MongoDB connection string
+• MongoDB Atlas Network Access settings
+
+Frontend shows "Network Error"
+
+Make sure the backend is running.
+
+Also check that the VITE_API_URL value is correct.
+
+Camera is not working
+
+Allow camera permission when the browser asks for it.
+
+npm install gives an error
+
+Check your Node.js version:
+
+node -v
+
+Use Node.js version 18 or newer.
+
+Running the Project
+
+You need to run both parts of the project.
+
+Backend
+
+cd server
+
+npm run dev
+
+Frontend
+
+cd client
+
+npm run dev
+
+Then open:
+
+[http://localhost:5173/](http://localhost:5173/)
+
+Keep both terminals running while using the website.
+
+Future Improvements
+
+Some features that can be added later:
+
+• Real face liveness detection
+• Real bKash payment
+• Real Nagad payment
+• Real card payment
+• SSLCommerz integration
+• Stripe integration
+• Email notifications
+• SMS notifications
+• Better admin controls
+• More parking locations
+• Better parking reports
+• Online payment verification
+
+License
+
+This project was created for educational and demonstration purposes.
